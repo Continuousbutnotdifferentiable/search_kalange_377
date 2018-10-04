@@ -287,7 +287,16 @@ class CornersProblem(search.SearchProblem):
         self._expanded = 0 # DO NOT CHANGE; Number of search nodes expanded
         # Please add any code here which you would like to use
         # in initializing the problem
+        
         "*** YOUR CODE HERE ***"
+        # Get starting pacman position
+        self.startPac = gameState.getPacmanPosition()
+
+        # Turn corners into list of tuples, append bool bit to keep track of visited
+        self.goalList = []
+        for i in self.corners:
+            i = (i,0)
+            goalList.append(i)
 
     def getStartState(self):
         """
@@ -295,6 +304,10 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
+        for i in self.corners:
+            if i[0] == self.startPac:
+                i[1] == 1
+        return (self.startPac,self.corners)
         util.raiseNotDefined()
 
     def isGoalState(self, state):
@@ -302,6 +315,12 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
+        for i in state[1]:
+            if i[1] == True:
+                continue
+            else:
+                return False
+        return True
         util.raiseNotDefined()
 
     def getSuccessors(self, state):
