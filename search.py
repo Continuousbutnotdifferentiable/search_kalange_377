@@ -241,7 +241,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             successors = problem.getSuccessors(current[0][0])
             for i in successors:
                 if i[0][0] not in seen:
-                    structure.update((i,currentRoute + [i[1]],current[2]+i[2]),current[2]+i[2])
+                    structure.update((i,currentRoute + [i[1]],current[2]+i[2]),current[2]+i[2]+heuristic(current[0][0],problem))
                 
     util.raiseNotDefined()
 
