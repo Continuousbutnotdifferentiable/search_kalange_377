@@ -1,0 +1,9 @@
+def Search():
+    directionsList = []
+    container = newContainer()
+    container.push((problem.getStartState(),0,directionsList))
+    while container != container.isEmpty:
+        n = container.pop()
+
+
+    return None
