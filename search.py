@@ -219,10 +219,10 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     emptyList = []
     
     # Initialize storage structure
-    structure = util.PriorityQueueWithFunction(heuristic)
+    structure = util.PriorityQueue()
     
     # Push Start Node
-    structure.push(((problem.getStartState(),"",0),emptyList,0))
+    structure.push(((problem.getStartState(),"",0),emptyList,0),0+heuristic(problem.getStartState(),problem))
     while not structure.isEmpty():
         
         # "pop" the relevant node
@@ -241,8 +241,9 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             successors = problem.getSuccessors(current[0][0])
             for i in successors:
                 if i[0][0] not in seen:
-                    structure.update((i,currentRoute + [i[1]],current[2]+i[2]),current[2]+i[2]+heuristic(current[0][0],problem))
+                    structure.update((i,currentRoute + [i[1]],current[2]+i[2]),current[2]+i[2]+heuristic(i[0],problem))
                 
+                    
     util.raiseNotDefined()
 
 def instructionSimplify(instructions):
