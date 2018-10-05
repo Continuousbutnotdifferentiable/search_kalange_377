@@ -146,7 +146,7 @@ def breadthFirstSearch(problem):
         
         # Copy the instructions list from current
         currentRoute = current[1]
-        
+
         # If we're at the goal, return the relevant instruction list to goal
         if problem.isGoalState(current[0][0]):
             return current[1]
