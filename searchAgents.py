@@ -295,7 +295,8 @@ class CornersProblem(search.SearchProblem):
         self.cornersList = []
         for i in self.corners:
             self.cornersList.append([list(i),0])   
-        print self.cornersList
+        print self.pacmanPosition, "startPac"
+        print self.corners, "corners"
 
     def getStartState(self):
         """
@@ -332,22 +333,24 @@ class CornersProblem(search.SearchProblem):
             state, 'action' is the action required to get there, and 'stepCost'
             is the incremental cost of expanding to that successor
         """
-        self._expanded += 1 # DO NOT CHANGE
+    
         successors = []
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             "*** YOUR CODE HERE ***"
             x,y = state[0]
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
-            hitsWall = self.walls[nextx][nexty]
-            if not hitsWall:
+            if not self.walls[nextx][nexty]:
                 print state, "state"
                 for i in state[1]:
-                    if list((nextx,nexty)) == i[0]:
+                    if list((x,y)) == i[0]:
                         i[1] = True 
-                nextState = ((nextx,nexty),self.cornersList)
+                print state, "stateafterloop"
+                nextState = ((nextx,nexty),state[1])
                 cost = 1
                 successors.append((nextState,action,cost))
+        
+        self._expanded += 1 # DO NOT CHANGE
         return successors
 
     def getCostOfActions(self, actions):
