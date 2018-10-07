@@ -149,6 +149,7 @@ def breadthFirstSearch(problem):
 
         # If we're at the goal, return the relevant instruction list to goal
         if problem.isGoalState(current[0][0]):
+            print current
             return current[1]
         
         # Else add current to seen and expand unseen nodes, updating distance(cost) and the route

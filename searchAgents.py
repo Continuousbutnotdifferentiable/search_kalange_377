@@ -285,29 +285,21 @@ class CornersProblem(search.SearchProblem):
             if not startingGameState.hasFood(*corner):
                 print 'Warning: no food in corner ' + str(corner)
         self._expanded = 0 # DO NOT CHANGE; Number of search nodes expanded
-        # Please add any code here which you would like to use
-        # in initializing the problem
-        
-        "*** YOUR CODE HERE ***"
-
-        # Turn corners into tuples with bool bit to keep track of visited
-        self.pacmanPosition = self.startingPosition
-        self.cornersList = []
-        for i in self.corners:
-            self.cornersList.append([list(i),0])   
-        print self.pacmanPosition, "startPac"
-        print self.corners, "corners"
 
     def getStartState(self):
         """
         Returns the start state (in your state space, not the full Pacman state
         space)
         """
-        "*** YOUR CODE HERE ***"
-        for corner in self.cornersList:
-            if corner[0] == self.startingPosition:
-                corner[1] == 1
-        return (self.startingPosition,self.cornersList)
+
+        # Make an empty list, if the starting position is a corner, add it to the list, else, return
+        # starting state and empty list
+        cornersList = []
+        for corner in self.corners:
+            if corner == self.startingPosition:
+                cornersList.append(corner)
+        return (self.startingPosition,cornersList)
+
         util.raiseNotDefined()
 
     def isGoalState(self, state):
@@ -315,8 +307,9 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        for i in state[1]:
-            if i[1] == True:
+        # If the state's list of corners includes all the corners in the problem, return True, else False
+        for corner in self.corners:
+            if corner in state[1]:
                 continue
             else:
                 return False
@@ -335,20 +328,21 @@ class CornersProblem(search.SearchProblem):
         """
     
         successors = []
+
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
-            "*** YOUR CODE HERE ***"
+            # Initializations from starter code
             x,y = state[0]
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
+            # Copy the current state's list of corners
+            cornersList = state[1]
             if not self.walls[nextx][nexty]:
-                print state, "state"
-                for i in state[1]:
-                    if list((x,y)) == i[0]:
-                        i[1] = True 
-                print state, "stateafterloop"
-                nextState = ((nextx,nexty),state[1])
-                cost = 1
-                successors.append((nextState,action,cost))
+                # If we haven't yet found a corner and it the next step is a corner, add it to the state's list of corners
+                if ((nextx,nexty) not in cornersList) and ((nextx,nexty) in self.corners):
+                    successors.append((((nextx,nexty),cornersList+[(nextx,nexty)]),action,1))
+                # Else, return the previous state's corners list and the next step, action, and cost
+                else:
+                    successors.append((((nextx,nexty),cornersList),action,1))
         
         self._expanded += 1 # DO NOT CHANGE
         return successors
@@ -507,6 +501,7 @@ class ClosestDotSearchAgent(SearchAgent):
         food = gameState.getFood()
         walls = gameState.getWalls()
         problem = AnyFoodSearchProblem(gameState)
+        while(AnyFoodSearchProblem.isGoalState(position))
 
         "*** YOUR CODE HERE ***"
         util.raiseNotDefined()
@@ -543,6 +538,9 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         complete the problem definition.
         """
         x,y = state
+        if self.food[x][y]:
+            return True    
+        return False
 
         "*** YOUR CODE HERE ***"
         util.raiseNotDefined()
