@@ -484,13 +484,7 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    if state == problem.getStartState():
-        problem.heuristicInfo['foundFood'] = []
-        problem.heuristicInfo['wallCount'] = problem.walls.count()
-    if (position in foodGrid.asList()) and (position not in problem.heuristicInfo['foundFood'])
-        problem.heuristicInfo['foundFood'].append(position)
     foodLeft = set(problem.heuristicInfo['foundFood']).symmetric_difference(set(foodGrid.asList[]))
-    print foodGrid.asList()
     return 0
 
 class ClosestDotSearchAgent(SearchAgent):
