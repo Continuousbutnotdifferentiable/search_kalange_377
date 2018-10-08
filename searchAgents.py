@@ -381,7 +381,6 @@ def cornersHeuristic(state, problem):
     xy1 = state[0]
     foundCorners = state[1]
     DistanceManhattan = []
-    holdouts = []
 
     if len(foundCorners) == 4:
         return 0
@@ -390,7 +389,7 @@ def cornersHeuristic(state, problem):
             continue
         else:
             xy2 = i
-            DistanceManhattan.append(abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1]))
+            DistanceManhattan.append(twoNodeManhattan(xy1,xy2))
     return max(DistanceManhattan)
 
 class AStarCornersAgent(SearchAgent):
@@ -485,6 +484,13 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
+    if state == problem.getStartState():
+        problem.heuristicInfo['foundFood'] = []
+        problem.heuristicInfo['wallCount'] = problem.walls.count()
+    if (position in foodGrid.asList()) and (position not in problem.heuristicInfo['foundFood'])
+        problem.heuristicInfo['foundFood'].append(position)
+    foodLeft = set(problem.heuristicInfo['foundFood']).symmetric_difference(set(foodGrid.asList[]))
+    print foodGrid.asList()
     return 0
 
 class ClosestDotSearchAgent(SearchAgent):
@@ -582,3 +588,9 @@ def mazeDistance(point1, point2, gameState):
     assert not walls[x2][y2], 'point2 is a wall: ' + str(point2)
     prob = PositionSearchProblem(gameState, start=point1, goal=point2, warn=False, visualize=False)
     return len(search.bfs(prob))
+
+def twoNodeManhattan(current,target)
+    # Manhattan distance computed for two points
+    xy1 = current
+    xy2 = target
+    return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
