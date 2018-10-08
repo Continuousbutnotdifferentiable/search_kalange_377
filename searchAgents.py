@@ -504,7 +504,7 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        # We can just call BFS as defined in search on the problem defined above
+        # We can just call BFS as defined in search on the AnyFoodSearchProblem defined above
         return breadthFirstSearch(problem)
 
         util.raiseNotDefined()
