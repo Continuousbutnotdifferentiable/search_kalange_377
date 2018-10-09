@@ -576,7 +576,7 @@ def foodHeuristic(state, problem):
         currentFood = nearFood
         unfoundFood.remove(currentFood)
 
-    return totalDist/numFood
+    return totalDist/numFood # This gets 2/4 which may have to be good enough
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
