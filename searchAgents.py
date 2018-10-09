@@ -380,17 +380,56 @@ def cornersHeuristic(state, problem):
     "*** YOUR CODE HERE ***"
     xy1 = state[0]
     foundCorners = state[1]
-    DistanceManhattan = []
+    unfoundCorners = []
+    totalDist = 0
 
+    # If Pacman has visited all the corners, return 0
     if len(foundCorners) == 4:
         return 0
+
+    # Keep track of the closest corner and pacman's distance to it
+    closestCorner = None
+    closestDist = float("inf")
+
+    # Loop over the corners
     for i in corners:
+        # Disregard corners which have been found
         if i in foundCorners:
             continue
         else:
+            # Make a new list that tracks unfound corners
+            unfoundCorners.append(i)
             xy2 = i
-            DistanceManhattan.append(twoNodeManhattan(xy1,xy2))
-    return max(DistanceManhattan)
+            # Get the distance to a corner
+            curDist = twoNodeManhattan(xy1,xy2)
+            # If its the nearest corner, record it
+            if curDist <= closestDist:
+                closestDist = curDist
+                closestCorner = i
+    
+    # Update the total estimated distance with the distance to the nearest corner
+    totalDist += closestDist
+    
+    # Initialize count
+    count = 0
+    
+    # Make currentCorner the closest Corner and remove it from unfoundCorners
+    currentCorner = closestCorner
+    unfoundCorners.remove(currentCorner)
+
+    # Loop, finding the nearest corner to the current one until we've found them all
+    while len(unfoundCorners) != 0:
+        nearCorner = None
+        nearDist = float("inf")
+        for corner in unfoundCorners:
+            if twoNodeManhattan(currentCorner,corner) <= nearDist:
+                nearCorner = corner
+                nearDist = twoNodeManhattan(currentCorner,corner)
+        totalDist += nearDist
+        currentCorner = nearCorner
+        unfoundCorners.remove(currentCorner)
+
+    return totalDist
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -484,7 +523,7 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    foodLeft = set(problem.heuristicInfo['foundFood']).symmetric_difference(set(foodGrid.asList[]))
+    #foodLeft = set(problem.heuristicInfo['foundFood']).symmetric_difference(set(foodGrid.asList[]))
     return 0
 
 class ClosestDotSearchAgent(SearchAgent):
@@ -516,6 +555,7 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
+        
         # We can just call BFS as defined in search on the AnyFoodSearchProblem defined above
         return breadthFirstSearch(problem)
 
@@ -583,7 +623,7 @@ def mazeDistance(point1, point2, gameState):
     prob = PositionSearchProblem(gameState, start=point1, goal=point2, warn=False, visualize=False)
     return len(search.bfs(prob))
 
-def twoNodeManhattan(current,target)
+def twoNodeManhattan(current,target):
     # Manhattan distance computed for two points
     xy1 = current
     xy2 = target
