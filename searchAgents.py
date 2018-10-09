@@ -528,6 +528,7 @@ def foodHeuristic(state, problem):
 
     # This adapts the methodology from corner search
     # Slow, but functional
+    numWalls = len(walls.asList())
     foodLeft = foodGrid.asList()
     numFood = len(foodLeft)
     totalDist = 0
@@ -576,7 +577,7 @@ def foodHeuristic(state, problem):
         currentFood = nearFood
         unfoundFood.remove(currentFood)
 
-    return totalDist/numFood # This gets 2/4 which may have to be good enough
+    return totalDist/numFood# This gets 2/4 which may have to be good enough
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
