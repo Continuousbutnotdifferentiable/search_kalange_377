@@ -268,3 +268,16 @@ bfs = breadthFirstSearch
 dfs = depthFirstSearch
 astar = aStarSearch
 ucs = uniformCostSearch
+
+def getLegalNeighbors(position, walls):
+        x,y = position
+        x_int, y_int = int(x + 0.5), int(y + 0.5)
+        neighbors = []
+        for dir, vec in Actions._directionsAsList:
+            dx, dy = vec
+            next_x = x_int + dx
+            if next_x < 0 or next_x == walls.width: continue
+            next_y = y_int + dy
+            if next_y < 0 or next_y == walls.height: continue
+            if not walls[next_x][next_y]: neighbors.append((next_x, next_y))
+        return neighbors

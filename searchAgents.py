@@ -42,6 +42,7 @@ import time
 import search
 from search import breadthFirstSearch
 
+
 class GoWestAgent(Agent):
     "An agent that goes West until it can't."
 
@@ -521,10 +522,60 @@ def foodHeuristic(state, problem):
     Subsequent calls to this heuristic can access
     problem.heuristicInfo['wallCount']
     """
-    position, foodGrid = state
+    xy1, foodGrid = state
+    walls = problem.walls
     "*** YOUR CODE HERE ***"
-    #foodLeft = set(problem.heuristicInfo['foundFood']).symmetric_difference(set(foodGrid.asList[]))
-    return 0
+
+    # This adapts the methodology from corner search
+    # Slow, but functional
+    foodLeft = foodGrid.asList()
+    totalDist = 0
+    unfoundFood = []
+
+
+    # If Pacman has visited all the food, return 0
+    if len(foodLeft) == 0:
+        return 0
+
+    # Keep track of the closest food and pacman's distance to it
+    closestFood = None
+    closestDist = float("inf")
+    
+    # Loop over the corners
+    for food in foodLeft:
+        # Disregard corners which have been found
+        unfoundFood.append(food)
+        xy2 = food
+        # Get the distance to a food bit
+        curDist = twoNodeManhattan(xy1,xy2)
+        # If its the nearest food, record it
+        if curDist <= closestDist:
+            closestDist = curDist
+            closestFood = food
+    
+    # Update the total estimated distance with the distance to the nearest corner
+    totalDist += closestDist
+    
+    # Initialize count
+    count = 0
+    
+    # Make currentCorner the closest Corner and remove it from unfoundCorners
+    currentFood = closestFood
+    unfoundFood.remove(currentFood)
+
+    # Loop, finding the nearest corner to the current one until we've found them all
+    while len(unfoundFood) != 0:
+        nearFood = None
+        nearDist = float("inf")
+        for food in unfoundFood:
+            if twoNodeManhattan(currentFood,food) <= nearDist:
+                nearFood = food
+                nearDist = twoNodeManhattan(currentFood,food)
+        totalDist += nearDist
+        currentFood = nearFood
+        unfoundFood.remove(currentFood)
+
+    return totalDist
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
